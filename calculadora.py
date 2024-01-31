@@ -1,77 +1,105 @@
-def operacoes(n1, n2, operacao):
-    if operacao == '+':
-        return n1 + n2
-    elif operacao == '-':
-        return n1 - n2
-    elif operacao == '*':
-        return n1 * n2
-    elif operacao == '/':
-        return n1 / n2
+class Calculadora:
 
+    def __init__(self, operacao, n1, n2):
+        self.operacao = operacao
+        self.n1 = n1
+        self.n2 = n2
 
+    def returnoperacao(self):
+        if self.operacao == '+':
+            return Calculadora.soma(self)
+        elif self.operacao == '-':
+            return Calculadora.subtracao(self)
+        elif self.operacao == '*':
+            return Calculadora.multiplicacao(self)
+        elif self.operacao == '/':
+            return Calculadora.divisao(self)
 
-def calculadora(textoinicio):
-    print(textoinicio)
-    operacao = input("Introduza sua operação > ")
-    while operacao not in ['+', '-', '*', '/']:
-        operacao = input(f"\n{textoinicio}\nIntroduza apenas uma opção valida! Introduza sua opção> ")
-    n1 = int(input("Introduza o primeiro numero > "))
-    while not isinstance(n1, int):
-        n1 = int(input(f"Introduza apenas numeros! > "))
-    n2 = int(input("introduza o segundo numero > "))
-    while not isinstance(n2, int):
-        n2 = int(input(f"Introduza apenas numeros! > "))
-    print(f"O resultado de {n1} {operacao} {n2} é igual = {operacoes(n1, n2, operacao)}")
-    resultado = operacoes(n1, n2, operacao)
-    recomecar(resultado)
-
-
-def recomecar(resultado):
-    denovo = input("Você gostaria de calcular uma conta novamente ? Se sim digite \"S\" se não digite \"N\" >")
-    while True:
-        if denovo.upper() == 'S':
-            condicao = input("Gostaria de inserir um numero na memoria ? Responda com S ou N >")
-            if condicao.upper() == "S":
-                print("Introduza S para usar o resultado da ultima Operação.")
-                print("Introduza N para criar uma memoria da sua escolha.")
-                condicao = input("Responda com S ou N >")
-                if condicao.upper() == "S":
-                    valormem = resultado
-                    print(f"O resultado de {resultado} + {valormem} = ")
-                    resultado += valormem
-                    print(resultado)
-                    calculadora(textoinicio = "|+ para soma         |\n|- para subtração    |\n|* para multiplicação|\n|/ para divisão      |\n")
-                elif condicao.upper() == "N":
-                    valormem = int(input("Introduza um novo valor para a memoria >"))
-                    while not isinstance(valormem, int):
-                        print("Introduza apenas numeros")
-                        valormem = input("Introduza um novo valor para a memoria >")
-                    print(f"O resultado de {resultado} + {valormem} = ")
-                    resultado += valormem
-                    print(resultado)
-                    calculadora(textoinicio = "|+ para soma         |\n|- para subtração    |\n|* para multiplicação|\n|/ para divisão      |\n")
-                else:
-                    continue
-            elif condicao == "N":
-                print("Nenhuma memoria gravada!")
-                calculadora(textoinicio = "|+ para soma         |\n|- para subtração    |\n|* para multiplicação|\n|/ para divisão      |\n")
-            else:
-                continue
-        elif denovo.upper() == 'N':
-            break
+    def validar(self):
+        operacoes = ['+', '-', '*', '/']
+        if self.operacao in operacoes:
+            pass
         else:
-            print("Erro, digite apenas \"S\" ou \"N\"")
-            continue
+            raise Exception('A operação inserida é incorreta')
+
+    def validarnum1(self):
+        if isinstance(self.n1, int):
+            pass
+        else:
+            raise ValueError('O numero inserido não é inteiro')
+
+    def validarnum2(self):
+        if isinstance(self.n1, self.n2, int):
+            pass
+        else:
+            raise ValueError('O numero inserido não é inteiro')
+
+    def soma(self):
+        return (self.n1 + self.n2)
+
+    def subtracao(self):
+        return (self.n1 - self.n2)
+
+    def divisao(self):
+        if self.n2 > 0:
+            return (self.n1 / self.n2)
+        else:
+            raise ZeroDivisionError('Não se pode dividir por zero')
+
+    def multiplicacao(self):
+        return (self.n1 * self.n2)
+
 
 def main():
-    print(f"Bem vindo {nome.capitalize()} a um programa que é uma calculadora!")
-    print("-" * 30)
-    calculadora(textoinicio = "|+ para soma         |\n|- para subtração    |\n|* para multiplicação|\n|/ para divisão      |\n")
+    ResultadoLocal = ResultadoGlobal
+    print('Olá!, bem vindo a calculadora!')
+    print('Introduza AC, para apagar tudo, e SAIR para sair!')
+    while True:
+        operacao = input('Insira uma operação presente nessa lista \'+\', \'-\', \'*\', \'/\'')
+        calculadora = Calculadora(operacao, n1=None, n2=None)
+        calculadora.validar()
+
+        n1 = input('Insira o primeiro numero')
+        try:
+            n1 = int(n1)
+        except:
+            if n1.upper() == 'SAIR':
+                break
+            elif n1.upper() == 'AC':
+                ResultadoLocal = ResultadoGlobal
+                print('TODOS OS ULTIMOS NUMEROS FORAM LIMPOS DO CACHE DO SISTEMA!')
+                continue
+            else:
+                calculadora = Calculadora(operacao, n1, n2=None)
+                calculadora.validarnum1()
+
+        n2 = input('Insira o segundo numero')
+        try:
+            n2 = int(n2)
+        except:
+            if n2.upper() == 'SAIR':
+                break
+            elif n2.upper() == 'AC':
+                ResultadoLocal = ResultadoGlobal
+                print('TODOS OS ULTIMOS NUMEROS FORAM LIMPOS DO CACHE DO SISTEMA!')
+                continue
+            else:
+                calculadora = Calculadora(operacao, n1, n2)
+                calculadora.validarnum2()
+
+        calculadora = Calculadora(operacao, n1, n2)
+        resultado = calculadora.returnoperacao() + ResultadoLocal
+        print(f'{n1} {operacao} {n2} = \n{resultado}')
+        ResultadoLocal = resultado
+
+    print('Obrigado por usar nossa calculadora =)')
 
 
+ResultadoGlobal = 0
 
-nome = input("Qual é seu nome ? > ")
-while not isinstance(nome, str):
-    print("Insira um nome correto!")
-    nome = input("Qual é seu nome ? > ")
-main()
+if __name__ == '__main__':
+    main()
+
+
+def fim():
+    return 'Obrigado por usar nossa calculadora ='
