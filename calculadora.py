@@ -16,8 +16,6 @@ class Calculadora:
             case '/':
                 if self.n2 != 0:
                     return self.n1 / self.n2
-                else:
-                    raise ZeroDivisionError('Não se pode dividir por zero')
 
             case '*':
                 return self.n1 * self.n2
